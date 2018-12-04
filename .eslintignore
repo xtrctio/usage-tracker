@@ -1,0 +1,4 @@
+source_resources/**/*
+processed_resources/**/*
+model/**/*
+scratch.js
