@@ -65,6 +65,15 @@ describe('usageTracker unit tests', () => {
   it('gets hash field for category and time', () => {
     const time = DateTime.utc(2018, 1, 1, 1, 14, 30);
     expect(UsageTracker.getBucketName('search', UsageTracker.CONSTANTS.TIME_BUCKETS.MIN5, time))
-      .to.eql('search---min5---2018-01-01T01:10:00.000Z');
+      .to.eql('min5---search---2018-01-01T01:10:00.000Z');
+  });
+
+  it('parses bucketName (hash field)', () => {
+    const utcTime = DateTime.utc(2018, 1, 1, 1, 10, 0);
+    const parsed = UsageTracker.parseBucketName('min5---search---2018-01-01T01:10:00.000Z');
+
+    expect(parsed.category).to.eql('search');
+    expect(parsed.timeBucket).to.eql('min5');
+    expect(parsed.utcTime.toISO()).to.eql(utcTime.toISO());
   });
 });
