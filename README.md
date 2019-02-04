@@ -1,5 +1,29 @@
 # usage-tracker
+
+[![CircleCI](https://circleci.com/gh/xtrctio/usage-tracker/tree/master.svg?style=svg&circle-token=aa8abb7ebc9bc473168a22e6afbd5178507e7704)](https://circleci.com/gh/xtrctio/usage-tracker/tree/master)
+
 Every request counts
+
+## Example
+```javascript
+const { UsageTracker } = require('@xtrctio/usage-tracker').services;
+
+const usageTracker = new UsageTracker({redis, db});
+
+const limits = {
+  min5: 10,
+  month: 10000
+};
+
+const result = await usageTracker.trackAndLimit('some-project', 'search-api', limits);
+
+if (result === null) {
+  console.log('No limits hit!');
+} else {
+  console.log(`Hit limits for ${Object.keys(result).join(',')}`);
+}
+
+```
 
 ## Classes
 
@@ -31,6 +55,8 @@ Every request counts
     * [new UsageTracker(services)](#new_UsageTracker_new)
     * _instance_
         * [.trackAndLimit(projectId, category, limits, utcTime)](#UsageTracker+trackAndLimit) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+        * [.undo(projectId, category, utcTime)](#UsageTracker+undo) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.checkLimits(projectId, category, limits, utcTime)](#UsageTracker+checkLimits) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
         * [.getUsageAtTime(projectId, category, utcTime)](#UsageTracker+getUsageAtTime) ⇒ <code>Promise.&lt;object&gt;</code>
         * [.export(startTime)](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.import([startTime])](#UsageTracker+import) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -67,10 +93,38 @@ Record traffic by a project to an API category and limit to max
 | limits | [<code>Limits</code>](#Limits) \| <code>object</code> | 
 | utcTime | <code>DateTime</code> | 
 
+<a name="UsageTracker+undo"></a>
+
+### usageTracker.undo(projectId, category, utcTime) ⇒ <code>Promise.&lt;void&gt;</code>
+Decrement all usage by one
+
+**Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
+
+| Param | Type |
+| --- | --- |
+| projectId | <code>string</code> | 
+| category | <code>string</code> | 
+| utcTime | <code>DateTime</code> | 
+
+<a name="UsageTracker+checkLimits"></a>
+
+### usageTracker.checkLimits(projectId, category, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+Check if previous usage is within limits without changing usage
+
+**Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
+**Returns**: <code>Promise.&lt;(null\|object)&gt;</code> - null if not limited, object of limits hit otherwise  
+
+| Param | Type |
+| --- | --- |
+| projectId | <code>string</code> | 
+| category | <code>string</code> | 
+| limits | [<code>Limits</code>](#Limits) \| <code>object</code> | 
+| utcTime | <code>DateTime</code> | 
+
 <a name="UsageTracker+getUsageAtTime"></a>
 
 ### usageTracker.getUsageAtTime(projectId, category, utcTime) ⇒ <code>Promise.&lt;object&gt;</code>
-Get usage at specifc time
+Get usage at specific time
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
 

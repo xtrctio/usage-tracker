@@ -1,6 +1,7 @@
 'use strict';
 
 /* eslint-disable func-names */
+require('dotenv').config();
 
 const { expect } = require('chai');
 const { DateTime } = require('luxon');
@@ -146,6 +147,96 @@ describe('usageTracker integration tests', () => {
       day: 3,
       month: 3,
     });
+  });
+
+  it('check usage that is below limits without changing usage', async () => {
+    const services = {
+      db: {},
+      redis,
+    };
+
+    const usageTracker = new UsageTracker(services);
+
+    const utcTime = DateTime.utc(2018, 1, 1, 1, 14, 30);
+    const projectId = 'foo';
+    const category = 'search';
+
+    const limits = { min5: 3 };
+
+    let result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+    result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+  });
+
+  it('increments usage is above limits without changing usage', async () => {
+    const services = {
+      db: {},
+      redis,
+    };
+
+    const usageTracker = new UsageTracker(services);
+
+    const utcTime = DateTime.utc(2018, 1, 1, 1, 14, 30);
+    const projectId = 'foo';
+    const category = 'search';
+
+    const limits = { min5: 3 };
+
+    let result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+    result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+    result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+
+    result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql({ min5: 3 });
+
+
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql({ min5: 3 });
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql({ min5: 3 });
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql({ min5: 3 });
+  });
+
+  it('undo one unit of usage', async () => {
+    const services = {
+      db: {},
+      redis,
+    };
+
+    const usageTracker = new UsageTracker(services);
+
+    const utcTime = DateTime.utc(2018, 1, 1, 1, 14, 30);
+    const projectId = 'foo';
+    const category = 'search';
+
+    const limits = { min5: 3 };
+
+    let result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+    result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+    result = await usageTracker.trackAndLimit(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
+
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql({ min5: 3 });
+
+    await usageTracker.undo(projectId, category, utcTime);
+
+    result = await usageTracker.checkLimits(projectId, category, limits, utcTime);
+    expect(result).to.eql(null);
   });
 
   it('_export data points', async () => {
