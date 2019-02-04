@@ -1,5 +1,29 @@
 # usage-tracker
+
+[![CircleCI](https://circleci.com/gh/xtrctio/usage-tracker/tree/master.svg?style=svg&circle-token=aa8abb7ebc9bc473168a22e6afbd5178507e7704)](https://circleci.com/gh/xtrctio/usage-tracker/tree/master)
+
 Every request counts
+
+## Example
+```javascript
+const { UsageTracker } = require('@xtrctio/usage-tracker').services;
+
+const usageTracker = new UsageTracker({redis, db});
+
+const limits = {
+  min5: 10,
+  month: 10000
+};
+
+const result = await usageTracker.trackAndLimit('some-project', 'search-api', limits);
+
+if (result === null) {
+  console.log('No limits hit!');
+} else {
+  console.log(`Hit limits for ${Object.keys(result).join(',')}`);
+}
+
+```
 
 ## Classes
 
@@ -70,7 +94,7 @@ Record traffic by a project to an API category and limit to max
 <a name="UsageTracker+getUsageAtTime"></a>
 
 ### usageTracker.getUsageAtTime(projectId, category, utcTime) ⇒ <code>Promise.&lt;object&gt;</code>
-Get usage at specifc time
+Get usage at specific time
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
 

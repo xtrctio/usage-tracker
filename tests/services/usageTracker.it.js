@@ -1,6 +1,7 @@
 'use strict';
 
 /* eslint-disable func-names */
+require('dotenv').config();
 
 const { expect } = require('chai');
 const { DateTime } = require('luxon');
