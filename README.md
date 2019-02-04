@@ -55,6 +55,8 @@ if (result === null) {
     * [new UsageTracker(services)](#new_UsageTracker_new)
     * _instance_
         * [.trackAndLimit(projectId, category, limits, utcTime)](#UsageTracker+trackAndLimit) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+        * [.undo(projectId, category, utcTime)](#UsageTracker+undo) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.checkLimits(projectId, category, limits, utcTime)](#UsageTracker+checkLimits) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
         * [.getUsageAtTime(projectId, category, utcTime)](#UsageTracker+getUsageAtTime) ⇒ <code>Promise.&lt;object&gt;</code>
         * [.export(startTime)](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.import([startTime])](#UsageTracker+import) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -80,6 +82,34 @@ if (result === null) {
 
 ### usageTracker.trackAndLimit(projectId, category, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
 Record traffic by a project to an API category and limit to max
+
+**Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
+**Returns**: <code>Promise.&lt;(null\|object)&gt;</code> - null if not limited, object of limits hit otherwise  
+
+| Param | Type |
+| --- | --- |
+| projectId | <code>string</code> | 
+| category | <code>string</code> | 
+| limits | [<code>Limits</code>](#Limits) \| <code>object</code> | 
+| utcTime | <code>DateTime</code> | 
+
+<a name="UsageTracker+undo"></a>
+
+### usageTracker.undo(projectId, category, utcTime) ⇒ <code>Promise.&lt;void&gt;</code>
+Decrement all usage by one
+
+**Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
+
+| Param | Type |
+| --- | --- |
+| projectId | <code>string</code> | 
+| category | <code>string</code> | 
+| utcTime | <code>DateTime</code> | 
+
+<a name="UsageTracker+checkLimits"></a>
+
+### usageTracker.checkLimits(projectId, category, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+Check if previous usage is within limits without changing usage
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
 **Returns**: <code>Promise.&lt;(null\|object)&gt;</code> - null if not limited, object of limits hit otherwise  
