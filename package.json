@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@google-cloud/firestore": "^1.0.1",
-    "@xtrctio/common": "^6.0.5",
+    "@xtrctio/common": "^6.0.6",
     "@xtrctio/xerror": "^1.0.1",
     "ajv": "^6.8.1",
     "ajv-errors": "^1.0.0",
@@ -23,7 +23,7 @@
     "validate.js": "^0.12.0"
   },
   "devDependencies": {
-    "@xtrctio/eslint-config": "^2.0.6",
+    "@xtrctio/eslint-config": "^2.0.7",
     "chai": "^4.1.2",
     "dotenv": "^6.2.0",
     "firebase-admin": "^7.0.0",
@@ -37,10 +37,17 @@
     "nyc": "^13.1.0",
     "sinon": "^7.2.3"
   },
+  "files": [
+    "lib/**",
+    "config/**",
+    "app/**",
+    "*.js",
+    "!scratch.*"
+  ],
   "homepage": "https://github.com/xtrctio/usage-tracker#readme",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run docs && LIST=`git diff-index --cached --name-only HEAD | grep '.*\\.js' | grep -v json`; if [ \"$LIST\" ]; then npm run lint && git add $LIST; fi"
+      "pre-commit": "fixpack && npm run docs && LIST=`git diff-index --cached --name-only HEAD | grep '.*\\.js' | grep -v json`; if [ \"$LIST\" ]; then npm run lint && git add $LIST; fi"
     }
   },
   "keywords": [
@@ -72,7 +79,7 @@
   "scripts": {
     "docs": "jsdoc2md --template README.template --files \"lib/**/*.js\" > README.md && git add README.md",
     "internet": "mocha \"tests/**/*.internet.js\"",
-    "lint": "eslint \"**/*.js\" --fix && fixpack",
+    "lint": "eslint \"**/*.js\" --fix",
     "test": "npm run unit && npm run lint",
     "test-all": "nyc mocha --use_strict \"tests/**/*.internet.js\" \"tests/**/*.it.js\" \"tests/**/*.unit.js\"",
     "test-most": "nyc mocha --use_strict \"tests/**/*.it.js\" \"tests/**/*.unit.js\"",
