@@ -58,7 +58,7 @@ if (result === null) {
         * [.undo(projectId, category, utcTime)](#UsageTracker+undo) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.checkLimits(projectId, category, limits, utcTime)](#UsageTracker+checkLimits) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
         * [.getUsageAtTime(projectId, category, utcTime)](#UsageTracker+getUsageAtTime) ⇒ <code>Promise.&lt;object&gt;</code>
-        * [.export(startTime)](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.export([startTime])](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.import([startTime])](#UsageTracker+import) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.clean([startTime])](#UsageTracker+clean) ⇒ <code>Promise.&lt;void&gt;</code>
     * _static_
@@ -136,14 +136,14 @@ Get usage at specific time
 
 <a name="UsageTracker+export"></a>
 
-### usageTracker.export(startTime) ⇒ <code>Promise.&lt;void&gt;</code>
-Export dataPoints to Firestore
+### usageTracker.export([startTime]) ⇒ <code>Promise.&lt;void&gt;</code>
+Export dataPoints to Firestore. Should be called periodically to minimize data loss in the event that Redis goes down
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
 
-| Param | Type | Default |
-| --- | --- | --- |
-| startTime | <code>DateTime</code> | <code></code> | 
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [startTime] | <code>DateTime</code> | <code></code> | override for testing |
 
 <a name="UsageTracker+import"></a>
 
