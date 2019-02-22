@@ -9,6 +9,7 @@
   "dependencies": {
     "@google-cloud/firestore": "^1.0.1",
     "@xtrctio/common": "^6.0.8",
+    "@xtrctio/redis": "0.0.3",
     "@xtrctio/xerror": "^1.0.1",
     "ajv": "^6.9.2",
     "ajv-errors": "^1.0.0",

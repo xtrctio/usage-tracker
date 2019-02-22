@@ -38,6 +38,15 @@ if (result === null) {
 
 ## Limits
 **Kind**: global class  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| min5 | <code>number</code> | 
+| hour | <code>number</code> | 
+| day | <code>number</code> | 
+| month | <code>number</code> | 
+
 <a name="new_Limits_new"></a>
 
 ### new Limits(params)
@@ -61,6 +70,8 @@ if (result === null) {
         * [.export([startTime])](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.import([startTime])](#UsageTracker+import) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.clean([startTime])](#UsageTracker+clean) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.start([intervalMs])](#UsageTracker+start) ⇒ <code>void</code>
+        * [.stop()](#UsageTracker+stop) ⇒ <code>void</code>
     * _static_
         * [.getBucketTime(timeBucket, utcTime)](#UsageTracker.getBucketTime) ⇒ <code>DateTime</code>
         * [.getBucketName(category, timeBucket, utcTime)](#UsageTracker.getBucketName) ⇒ <code>string</code>
@@ -167,6 +178,23 @@ Remove old usage from Redis
 | --- | --- | --- | --- |
 | [startTime] | <code>DateTime</code> | <code>(now minus days)</code> | override for testing |
 
+<a name="UsageTracker+start"></a>
+
+### usageTracker.start([intervalMs]) ⇒ <code>void</code>
+Attempt import if necessary and then start automatic export
+
+**Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| [intervalMs] | <code>number</code> | <code>CONSTANTS.DEFAULT_EXPORT_INTERVAL_MS</code> | 
+
+<a name="UsageTracker+stop"></a>
+
+### usageTracker.stop() ⇒ <code>void</code>
+Stop automatic export to Firebase
+
+**Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
 <a name="UsageTracker.getBucketTime"></a>
 
 ### UsageTracker.getBucketTime(timeBucket, utcTime) ⇒ <code>DateTime</code>
