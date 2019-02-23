@@ -2,6 +2,7 @@
 
 const { expect } = require('chai');
 const { DateTime } = require('luxon');
+const sinon = require('sinon');
 
 const { UsageTracker } = require('../../lib/services');
 
@@ -75,5 +76,46 @@ describe('usageTracker unit tests', () => {
     expect(parsed.category).to.eql('search');
     expect(parsed.timeBucket).to.eql('min5');
     expect(parsed.utcTime.toISO()).to.eql(utcTime.toISO());
+  });
+
+  it('get usage limited to specific number of buckets', async () => {
+    const where = {
+      get: sinon.stub().resolves([]),
+    };
+
+    where.where = sinon.stub().returns(where);
+
+    const usageTracker = new UsageTracker({
+      redis: {},
+      db: {
+        collection: where,
+      },
+    });
+    const startTime = DateTime.utc(2017, 1, 1, 1, 14, 30);
+    const endTime = DateTime.utc(2018, 1, 1, 1, 14, 30);
+    const result = await usageTracker.getUsage('some-project', 'category', 'min5', startTime.toISO(), endTime.toISO())
+      .then(() => 'should reject')
+      .catch((err) => err);
+    expect(result.message).to.eql('endTime - startTime cannot yield more than 100 buckets');
+  });
+
+  it('get usage limits startTime before endTime', async () => {
+    const where = {
+      get: sinon.stub().resolves([]),
+    };
+
+    where.where = sinon.stub().returns(where);
+
+    const usageTracker = new UsageTracker({
+      redis: {},
+      db: { collection: where },
+    });
+
+    const startTime = DateTime.utc(2018, 1, 1, 1, 14, 30);
+    const endTime = DateTime.utc(2017, 1, 1, 1, 14, 30);
+    const result = await usageTracker.getUsage('some-project', 'category', 'min5', startTime.toISO(), endTime.toISO())
+      .then(() => 'should reject')
+      .catch((err) => err);
+    expect(result.message).to.eql('startTime must be before endTime');
   });
 });
