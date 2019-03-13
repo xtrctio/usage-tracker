@@ -70,6 +70,7 @@ if (result === null) {
         * [.export([startTime])](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.import([startTime])](#UsageTracker+import) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.clean([startTime])](#UsageTracker+clean) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.getUsage(projectId, category, timeBucket, startTime, [endTime])](#UsageTracker+getUsage) ⇒ <code>Promise.&lt;Array&gt;</code>
         * [.start([intervalMs])](#UsageTracker+start) ⇒ <code>void</code>
         * [.stop()](#UsageTracker+stop) ⇒ <code>void</code>
     * _static_
@@ -177,6 +178,21 @@ Remove old usage from Redis
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [startTime] | <code>DateTime</code> | <code>(now minus days)</code> | override for testing |
+
+<a name="UsageTracker+getUsage"></a>
+
+### usageTracker.getUsage(projectId, category, timeBucket, startTime, [endTime]) ⇒ <code>Promise.&lt;Array&gt;</code>
+Get usage for project and category at the bucket resolution, from start to end
+
+**Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| projectId | <code>string</code> |  |  |
+| category | <code>string</code> |  |  |
+| timeBucket | <code>string</code> |  |  |
+| startTime | <code>string</code> |  | ISO8601 timestamp |
+| [endTime] | <code>string</code> | <code>&quot;now&quot;</code> | ISO8601 timestamp |
 
 <a name="UsageTracker+start"></a>
 

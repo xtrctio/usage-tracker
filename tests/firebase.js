@@ -22,15 +22,11 @@ const deletePath = async (_path) => firebaseTools.firestore
     recursive: true,
     yes: true,
     token: (await fs.readFile(path.join(homedir, 'service-accounts/firebase-token'), 'utf8')).trim(),
-    timestampsInSnapshots: true,
   })
   .then(() => ({ path: _path }));
 
-const db = admin.firestore();
-db.settings({ timestampsInSnapshots: true });
-
 module.exports = {
-  db,
+  db: admin.firestore(),
   auth: admin.auth(),
   deletePath,
 };

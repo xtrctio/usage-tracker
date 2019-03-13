@@ -2,6 +2,8 @@
 
 /* eslint-disable func-names */
 
+require('dotenv').config();
+
 const { expect } = require('chai');
 const { DateTime } = require('luxon');
 const Promise = require('bluebird');
@@ -90,5 +92,48 @@ describe('usageTracker integration tests', function () {
 
     expect(project1PostImportCount).to.eql(104);
     expect(project2PostImportCount).to.eql(63);
+  });
+
+  it('get usage from firebase', async () => {
+    const services = {
+      db: firebase.db,
+      redis,
+    };
+
+    const usageTracker = new UsageTracker(services);
+
+    const utcTime = DateTime.utc(2018, 1, 1, 1, 14, 30);
+
+    // Create usage in redis
+    await Promise.map(Array.from(Array(50).keys()), async (n) => {
+      await usageTracker.trackAndLimit('project1', 'search', {}, utcTime.plus({ hours: n }));
+    }, { concurrency: 10 });
+
+    await Promise.map(Array.from(Array(30).keys()), async (n) => {
+      await usageTracker.trackAndLimit('project2', 'search', {}, utcTime.plus({ hours: n }));
+    }, { concurrency: 10 });
+
+    await usageTracker.export();
+
+    const usage = await usageTracker.getUsage('project1', 'search', 'day', utcTime.toISO(), utcTime.plus({ days: 5 }).toISO());
+
+    const expectedUsage = [
+      {
+        projectId: 'project1',
+        category: 'search',
+        utcTime: '2018-01-02T00:00:00.000Z',
+        value: 24,
+        timeBucket: 'day',
+      },
+      {
+        projectId: 'project1',
+        category: 'search',
+        utcTime: '2018-01-03T00:00:00.000Z',
+        value: 3,
+        timeBucket: 'day',
+      },
+    ];
+
+    expect(usage).to.eql(expectedUsage);
   });
 });
