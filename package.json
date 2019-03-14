@@ -7,11 +7,10 @@
     "url": "https://github.com/xtrctio/usage-tracker/issues"
   },
   "dependencies": {
-    "@google-cloud/firestore": "^1.0.1",
-    "@xtrctio/common": "^6.0.8",
-    "@xtrctio/redis": "0.0.3",
-    "@xtrctio/xerror": "^1.0.1",
-    "ajv": "^6.9.2",
+    "@xtrctio/common": "^6.0.9",
+    "@xtrctio/redis": "^1.1.5",
+    "@xtrctio/xerror": "^1.0.2",
+    "ajv": "^6.10.0",
     "ajv-errors": "^1.0.0",
     "bluebird": "^3.5.3",
     "bunyan": "^1.8.12",
@@ -19,24 +18,22 @@
     "ioredis": "^4.6.2",
     "json-stable-stringify": "^1.0.1",
     "lodash": "^4.17.10",
-    "luxon": "^1.11.3",
-    "uuid": "^3.3.2",
-    "validate.js": "^0.12.0"
+    "luxon": "^1.11.4"
   },
   "devDependencies": {
-    "@xtrctio/eslint-config": "^2.0.7",
+    "@xtrctio/eslint-config": "^3.0.5",
     "chai": "^4.1.2",
-    "dotenv": "^6.2.0",
-    "firebase-admin": "^7.0.0",
-    "firebase-tools": "^6.3.1",
-    "fixpack": "^2.3.1",
+    "dotenv": "^7.0.0",
+    "eslint": "^5.15.1",
+    "firebase-admin": "^7.1.0",
+    "firebase-tools": "^6.5.0",
     "husky": "^1.3.1",
     "istanbul": "^0.4.5",
     "jsdoc": "^3.5.5",
     "jsdoc-to-markdown": "^4.0.1",
-    "mocha": "^6.0.1",
+    "mocha": "^6.0.2",
     "nyc": "^13.3.0",
-    "sinon": "^7.2.4"
+    "sinon": "^7.2.7"
   },
   "files": [
     "lib/**",
@@ -72,6 +69,9 @@
       "lcov"
     ],
     "all": true
+  },
+  "peerDependencies": {
+    "firebase-admin": "^7.0.0"
   },
   "repository": {
     "type": "git",

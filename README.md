@@ -149,7 +149,7 @@ Get usage at specific time
 <a name="UsageTracker+export"></a>
 
 ### usageTracker.export([startTime]) ⇒ <code>Promise.&lt;void&gt;</code>
-Export dataPoints to Firestore. Should be called periodically to minimize data loss in the event that Redis goes down
+Export dataPoints to firestore. Should be called periodically to minimize data loss in the event that Redis goes down
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
 
@@ -160,7 +160,7 @@ Export dataPoints to Firestore. Should be called periodically to minimize data l
 <a name="UsageTracker+import"></a>
 
 ### usageTracker.import([startTime]) ⇒ <code>Promise.&lt;void&gt;</code>
-Import usage from Firestore
+Import usage from firestore
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
 
