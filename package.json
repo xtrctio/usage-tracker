@@ -71,7 +71,7 @@
     "all": true
   },
   "peerDependencies": {
-    "firebase-admin": "^7.0.0"
+    "firebase-admin": "^7.1.0"
   },
   "repository": {
     "type": "git",
