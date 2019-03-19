@@ -118,4 +118,13 @@ describe('usageTracker unit tests', () => {
       .catch((err) => err);
     expect(result.message).to.eql('startTime must be before endTime');
   });
+
+  it('get month based on reset data', () => {
+    expect(UsageTracker.getMonthFromResetDay(14, DateTime.fromISO('2018-01-01T00:00:00.000Z').toUTC()).toISO())
+      .to.eql('2017-12-01T00:00:00.000Z');
+    expect(UsageTracker.getMonthFromResetDay(14, DateTime.fromISO('2018-01-14T00:00:00.000Z').toUTC()).toISO())
+      .to.eql('2018-01-01T00:00:00.000Z');
+    expect(UsageTracker.getMonthFromResetDay(14, DateTime.fromISO('2018-01-15T00:00:00.000Z').toUTC()).toISO())
+      .to.eql('2018-01-01T00:00:00.000Z');
+  });
 });
