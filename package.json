@@ -1,7 +1,7 @@
 {
   "name": "@xtrctio/usage-tracker",
   "description": "Every request counts",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "author": "Eric Hacke",
   "bugs": {
     "url": "https://github.com/xtrctio/usage-tracker/issues"
