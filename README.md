@@ -65,7 +65,7 @@ if (result === null) {
     * _instance_
         * [.trackAndLimit(projectId, category, resetDay, limits, utcTime)](#UsageTracker+trackAndLimit) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
         * [.undo(projectId, category, resetDay, utcTime)](#UsageTracker+undo) ⇒ <code>Promise.&lt;void&gt;</code>
-        * [.checkLimits(projectId, category, limits, resetDay, utcTime)](#UsageTracker+checkLimits) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+        * [.checkLimits(projectId, category, resetDay, limits, utcTime)](#UsageTracker+checkLimits) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
         * [.getUsageAtTime(projectId, category, resetDay, utcTime)](#UsageTracker+getUsageAtTime) ⇒ <code>Promise.&lt;object&gt;</code>
         * [.export([startTime])](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.import([startTime])](#UsageTracker+import) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -123,7 +123,7 @@ Decrement all usage by one
 
 <a name="UsageTracker+checkLimits"></a>
 
-### usageTracker.checkLimits(projectId, category, limits, resetDay, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+### usageTracker.checkLimits(projectId, category, resetDay, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
 Check if previous usage is within limits without changing usage
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
@@ -133,8 +133,8 @@ Check if previous usage is within limits without changing usage
 | --- | --- |
 | projectId | <code>string</code> | 
 | category | <code>string</code> | 
-| limits | [<code>Limits</code>](#Limits) \| <code>object</code> | 
 | resetDay | <code>number</code> | 
+| limits | [<code>Limits</code>](#Limits) \| <code>object</code> | 
 | utcTime | <code>DateTime</code> | 
 
 <a name="UsageTracker+getUsageAtTime"></a>
