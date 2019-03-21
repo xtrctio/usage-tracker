@@ -60,11 +60,11 @@ describe('usageTracker integration tests', function () {
 
     // Create usage in redis
     await Promise.map(Array.from(Array(50).keys()), async (n) => {
-      await usageTracker.trackAndLimit('project1', 'search', {}, utcTime.plus({ hours: n }));
+      await usageTracker.trackAndLimit('project1', 'search', 1, {}, utcTime.plus({ hours: n }));
     }, { concurrency: 10 });
 
     await Promise.map(Array.from(Array(30).keys()), async (n) => {
-      await usageTracker.trackAndLimit('project2', 'search', {}, utcTime.plus({ hours: n }));
+      await usageTracker.trackAndLimit('project2', 'search', 1, {}, utcTime.plus({ hours: n }));
     }, { concurrency: 10 });
 
     const project1PreImportCount = await redis.hlen(UsageTracker.getUsageKey('project1'));
@@ -106,11 +106,11 @@ describe('usageTracker integration tests', function () {
 
     // Create usage in redis
     await Promise.map(Array.from(Array(50).keys()), async (n) => {
-      await usageTracker.trackAndLimit('project1', 'search', {}, utcTime.plus({ hours: n }));
+      await usageTracker.trackAndLimit('project1', 'search', 1, {}, utcTime.plus({ hours: n }));
     }, { concurrency: 10 });
 
     await Promise.map(Array.from(Array(30).keys()), async (n) => {
-      await usageTracker.trackAndLimit('project2', 'search', {}, utcTime.plus({ hours: n }));
+      await usageTracker.trackAndLimit('project2', 'search', 1, {}, utcTime.plus({ hours: n }));
     }, { concurrency: 10 });
 
     await usageTracker.export();

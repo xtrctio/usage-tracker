@@ -63,10 +63,10 @@ if (result === null) {
 * [UsageTracker](#UsageTracker)
     * [new UsageTracker(services)](#new_UsageTracker_new)
     * _instance_
-        * [.trackAndLimit(projectId, category, limits, utcTime)](#UsageTracker+trackAndLimit) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
-        * [.undo(projectId, category, utcTime)](#UsageTracker+undo) ⇒ <code>Promise.&lt;void&gt;</code>
-        * [.checkLimits(projectId, category, limits, utcTime)](#UsageTracker+checkLimits) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
-        * [.getUsageAtTime(projectId, category, utcTime)](#UsageTracker+getUsageAtTime) ⇒ <code>Promise.&lt;object&gt;</code>
+        * [.trackAndLimit(projectId, category, resetDay, limits, utcTime)](#UsageTracker+trackAndLimit) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+        * [.undo(projectId, category, resetDay, utcTime)](#UsageTracker+undo) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.checkLimits(projectId, category, resetDay, limits, utcTime)](#UsageTracker+checkLimits) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+        * [.getUsageAtTime(projectId, category, resetDay, utcTime)](#UsageTracker+getUsageAtTime) ⇒ <code>Promise.&lt;object&gt;</code>
         * [.export([startTime])](#UsageTracker+export) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.import([startTime])](#UsageTracker+import) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.clean([startTime])](#UsageTracker+clean) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -74,8 +74,9 @@ if (result === null) {
         * [.start([intervalMs])](#UsageTracker+start) ⇒ <code>void</code>
         * [.stop()](#UsageTracker+stop) ⇒ <code>void</code>
     * _static_
-        * [.getBucketTime(timeBucket, utcTime)](#UsageTracker.getBucketTime) ⇒ <code>DateTime</code>
-        * [.getBucketName(category, timeBucket, utcTime)](#UsageTracker.getBucketName) ⇒ <code>string</code>
+        * [.getMonthFromResetDay(resetDay, utcTime)](#UsageTracker.getMonthFromResetDay) ⇒ <code>DateTime</code>
+        * [.getBucketTime(timeBucket, resetDay, utcTime)](#UsageTracker.getBucketTime) ⇒ <code>DateTime</code>
+        * [.getBucketName(category, timeBucket, resetDay, utcTime)](#UsageTracker.getBucketName) ⇒ <code>string</code>
         * [.parseBucketName(bucketName)](#UsageTracker.parseBucketName) ⇒ <code>Object</code>
         * [.getUsageKey(projectId)](#UsageTracker.getUsageKey) ⇒ <code>string</code>
         * [.parseUsageKey(usageKey)](#UsageTracker.parseUsageKey) ⇒ <code>Object</code>
@@ -92,7 +93,7 @@ if (result === null) {
 
 <a name="UsageTracker+trackAndLimit"></a>
 
-### usageTracker.trackAndLimit(projectId, category, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+### usageTracker.trackAndLimit(projectId, category, resetDay, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
 Record traffic by a project to an API category and limit to max
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
@@ -102,12 +103,13 @@ Record traffic by a project to an API category and limit to max
 | --- | --- |
 | projectId | <code>string</code> | 
 | category | <code>string</code> | 
+| resetDay | <code>number</code> | 
 | limits | [<code>Limits</code>](#Limits) \| <code>object</code> | 
 | utcTime | <code>DateTime</code> | 
 
 <a name="UsageTracker+undo"></a>
 
-### usageTracker.undo(projectId, category, utcTime) ⇒ <code>Promise.&lt;void&gt;</code>
+### usageTracker.undo(projectId, category, resetDay, utcTime) ⇒ <code>Promise.&lt;void&gt;</code>
 Decrement all usage by one
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
@@ -116,11 +118,12 @@ Decrement all usage by one
 | --- | --- |
 | projectId | <code>string</code> | 
 | category | <code>string</code> | 
+| resetDay | <code>number</code> | 
 | utcTime | <code>DateTime</code> | 
 
 <a name="UsageTracker+checkLimits"></a>
 
-### usageTracker.checkLimits(projectId, category, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
+### usageTracker.checkLimits(projectId, category, resetDay, limits, utcTime) ⇒ <code>Promise.&lt;(null\|object)&gt;</code>
 Check if previous usage is within limits without changing usage
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
@@ -130,12 +133,13 @@ Check if previous usage is within limits without changing usage
 | --- | --- |
 | projectId | <code>string</code> | 
 | category | <code>string</code> | 
+| resetDay | <code>number</code> | 
 | limits | [<code>Limits</code>](#Limits) \| <code>object</code> | 
 | utcTime | <code>DateTime</code> | 
 
 <a name="UsageTracker+getUsageAtTime"></a>
 
-### usageTracker.getUsageAtTime(projectId, category, utcTime) ⇒ <code>Promise.&lt;object&gt;</code>
+### usageTracker.getUsageAtTime(projectId, category, resetDay, utcTime) ⇒ <code>Promise.&lt;object&gt;</code>
 Get usage at specific time
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
@@ -144,6 +148,7 @@ Get usage at specific time
 | --- | --- |
 | projectId | <code>string</code> | 
 | category | <code>string</code> | 
+| resetDay | <code>number</code> | 
 | utcTime | <code>DateTime</code> | 
 
 <a name="UsageTracker+export"></a>
@@ -211,9 +216,21 @@ Attempt import if necessary and then start automatic export
 Stop automatic export to Firebase
 
 **Kind**: instance method of [<code>UsageTracker</code>](#UsageTracker)  
+<a name="UsageTracker.getMonthFromResetDay"></a>
+
+### UsageTracker.getMonthFromResetDay(resetDay, utcTime) ⇒ <code>DateTime</code>
+Get current billng month based on reset date and time
+
+**Kind**: static method of [<code>UsageTracker</code>](#UsageTracker)  
+
+| Param | Type |
+| --- | --- |
+| resetDay | <code>number</code> | 
+| utcTime | <code>DateTime</code> | 
+
 <a name="UsageTracker.getBucketTime"></a>
 
-### UsageTracker.getBucketTime(timeBucket, utcTime) ⇒ <code>DateTime</code>
+### UsageTracker.getBucketTime(timeBucket, resetDay, utcTime) ⇒ <code>DateTime</code>
 Consistently rounds down to the nearest 5 minute increment and returns the new DateTime
 
 **Kind**: static method of [<code>UsageTracker</code>](#UsageTracker)  
@@ -221,11 +238,12 @@ Consistently rounds down to the nearest 5 minute increment and returns the new D
 | Param | Type |
 | --- | --- |
 | timeBucket | <code>string</code> | 
+| resetDay | <code>number</code> | 
 | utcTime | <code>DateTime</code> | 
 
 <a name="UsageTracker.getBucketName"></a>
 
-### UsageTracker.getBucketName(category, timeBucket, utcTime) ⇒ <code>string</code>
+### UsageTracker.getBucketName(category, timeBucket, resetDay, utcTime) ⇒ <code>string</code>
 Gets bucket name for hash field based on project and time
 
 **Kind**: static method of [<code>UsageTracker</code>](#UsageTracker)  
@@ -234,6 +252,7 @@ Gets bucket name for hash field based on project and time
 | --- | --- |
 | category | <code>string</code> | 
 | timeBucket | <code>string</code> | 
+| resetDay | <code>number</code> | 
 | utcTime | <code>DateTime</code> | 
 
 <a name="UsageTracker.parseBucketName"></a>
