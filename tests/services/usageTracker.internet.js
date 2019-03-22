@@ -8,7 +8,7 @@ const { expect } = require('chai');
 const { DateTime } = require('luxon');
 const Promise = require('bluebird');
 
-const Redis = require('ioredis');
+const Redis = require('@xtrctio/redis');
 const firebase = require('../firebase');
 
 const testConfig = require('../config');
@@ -16,7 +16,7 @@ const { UsageTracker } = require('../../lib/services');
 
 const log = require('../../logger');
 
-const DELAY = 2;
+const DELAY = 1;
 
 describe('usageTracker integration tests', function () {
   this.timeout(20000);
@@ -81,6 +81,8 @@ describe('usageTracker integration tests', function () {
     expect(querySnapshot.size).to.eql(167);
     expect(querySnapshot.size).to.eql(project1PreImportCount + project2PreImportCount);
 
+    expect(await usageTracker._getLastExportTime()).to.not.eql(null);
+
     // Wipe redis
     await redis.flushdb();
 
@@ -92,6 +94,58 @@ describe('usageTracker integration tests', function () {
 
     expect(project1PostImportCount).to.eql(104);
     expect(project2PostImportCount).to.eql(63);
+  });
+
+  it('do not import if last export is set', async () => {
+    const services = {
+      db: firebase.db,
+      redis,
+    };
+
+    const usageTracker = new UsageTracker(services);
+
+    // Make it smaller to force scrolling
+    UsageTracker.CONSTANTS.MAX_IMPORT_BATCH = 20;
+
+    const utcTime = DateTime.utc(2018, 1, 1, 1, 14, 30);
+
+    // Create usage in redis
+    await Promise.map(Array.from(Array(50).keys()), async (n) => {
+      await usageTracker.trackAndLimit('project1', 'search', 1, {}, utcTime.plus({ hours: n }));
+    }, { concurrency: 10 });
+
+    await Promise.map(Array.from(Array(30).keys()), async (n) => {
+      await usageTracker.trackAndLimit('project2', 'search', 1, {}, utcTime.plus({ hours: n }));
+    }, { concurrency: 10 });
+
+    const project1PreImportCount = await redis.hlen(UsageTracker.getUsageKey('project1'));
+    const project2PreImportCount = await redis.hlen(UsageTracker.getUsageKey('project2'));
+    await usageTracker.export();
+
+    expect(project1PreImportCount).to.eql(104);
+    expect(project2PreImportCount).to.eql(63);
+
+    const querySnapshot = await services.db
+      .collection(UsageTracker.CONSTANTS.COLUMN_NAMES.USAGE)
+      .get();
+
+    expect(querySnapshot.size).to.eql(167);
+    expect(querySnapshot.size).to.eql(project1PreImportCount + project2PreImportCount);
+
+    expect(await usageTracker._getLastExportTime()).to.not.eql(null);
+
+    // Wipe redis
+    await redis.flushdb();
+    await usageTracker._setLastExportTime(utcTime);
+
+    // Import from Firestore (override the date)
+    await usageTracker.import(utcTime.minus({ months: 2 }));
+
+    const project1PostImportCount = await redis.hlen(UsageTracker.getUsageKey('project1'));
+    const project2PostImportCount = await redis.hlen(UsageTracker.getUsageKey('project2'));
+
+    expect(project1PostImportCount).to.eql(0);
+    expect(project2PostImportCount).to.eql(0);
   });
 
   it('get usage from firebase', async () => {
