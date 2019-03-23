@@ -127,4 +127,67 @@ describe('usageTracker unit tests', () => {
     expect(UsageTracker.getMonthFromResetDay(14, DateTime.fromISO('2018-01-15T00:00:00.000Z').toUTC()).toISO())
       .to.eql('2018-01-01T00:00:00.000Z');
   });
+
+  it('get time range', () => {
+    const expectedRange = {
+      '2018-01-01T00:00:00.000Z': {
+        value: 0,
+      },
+      '2018-01-02T00:00:00.000Z': {
+        value: 0,
+      },
+      '2018-01-03T00:00:00.000Z': {
+        value: 0,
+      },
+      '2018-01-04T00:00:00.000Z': {
+        value: 0,
+      },
+      '2018-01-05T00:00:00.000Z': {
+        value: 0,
+      },
+    };
+
+    const start = DateTime.fromISO('2018-01-01T00:00:00.000Z').toUTC();
+    const end = DateTime.fromISO('2018-01-05T00:00:00.000Z').toUTC();
+
+    expect(UsageTracker._getBucketRangeObject('day', start, end)).to.eql(expectedRange);
+  });
+
+  it('get time range min5', () => {
+    const expectedRange = {
+      '2018-01-01T00:00:00.000Z': {
+        value: 0,
+      },
+      '2018-01-01T00:05:00.000Z': {
+        value: 0,
+      },
+      '2018-01-01T00:10:00.000Z': {
+        value: 0,
+      },
+    };
+
+    const start = DateTime.fromISO('2018-01-01T00:00:00.000Z').toUTC();
+    const end = DateTime.fromISO('2018-01-01T00:10:00.000Z').toUTC();
+
+    expect(UsageTracker._getBucketRangeObject('min5', start, end)).to.eql(expectedRange);
+  });
+
+  it('get time range min5 with rounding', () => {
+    const expectedRange = {
+      '2018-01-01T00:00:00.000Z': {
+        value: 0,
+      },
+      '2018-01-01T00:05:00.000Z': {
+        value: 0,
+      },
+      '2018-01-01T00:10:00.000Z': {
+        value: 0,
+      },
+    };
+
+    const start = DateTime.fromISO('2018-01-01T00:01:00.000Z').toUTC();
+    const end = DateTime.fromISO('2018-01-01T00:09:00.000Z').toUTC();
+
+    expect(UsageTracker._getBucketRangeObject('min5', start, end)).to.eql(expectedRange);
+  });
 });
