@@ -278,44 +278,58 @@ describe('usageTracker integration tests', () => {
         timeBucket: 'min5',
         category: 'search',
         utcTime: '2018-01-01T01:10:00.000Z',
-        projectId: 'foo',
         value: 3,
-      }, {
+        projectId: 'foo',
+        bucketName: 'min5---search---2018-01-01T01:10:00.000Z',
+      },
+      {
         timeBucket: 'hour',
         category: 'search',
         utcTime: '2018-01-01T01:00:00.000Z',
-        projectId: 'foo',
         value: 3,
-      }, {
+        projectId: 'foo',
+        bucketName: 'hour---search---2018-01-01T01:00:00.000Z',
+      },
+      {
         timeBucket: 'day',
         category: 'search',
         utcTime: '2018-01-01T00:00:00.000Z',
-        projectId: 'foo',
         value: 3,
-      }, {
+        projectId: 'foo',
+        bucketName: 'day---search---2018-01-01T00:00:00.000Z',
+      },
+      {
+        resetDay: 1,
         timeBucket: 'month',
         category: 'search',
         utcTime: '2018-01-01T00:00:00.000Z',
-        projectId: 'foo',
         value: 4,
-      }, {
+        projectId: 'foo',
+        bucketName: 'month||1---search---2018-01-01T00:00:00.000Z',
+      },
+      {
         timeBucket: 'min5',
         category: 'search',
         utcTime: '2018-01-23T17:10:00.000Z',
-        projectId: 'foo',
         value: 1,
-      }, {
+        projectId: 'foo',
+        bucketName: 'min5---search---2018-01-23T17:10:00.000Z',
+      },
+      {
         timeBucket: 'hour',
         category: 'search',
         utcTime: '2018-01-23T17:00:00.000Z',
-        projectId: 'foo',
         value: 1,
-      }, {
+        projectId: 'foo',
+        bucketName: 'hour---search---2018-01-23T17:00:00.000Z',
+      },
+      {
         timeBucket: 'day',
         category: 'search',
         utcTime: '2018-01-23T00:00:00.000Z',
-        projectId: 'foo',
         value: 1,
+        projectId: 'foo',
+        bucketName: 'day---search---2018-01-23T00:00:00.000Z',
       },
     ];
 
@@ -362,26 +376,34 @@ describe('usageTracker integration tests', () => {
         timeBucket: 'min5',
         category: 'search',
         utcTime: '2018-01-23T01:10:00.000Z',
-        projectId: 'foo',
         value: 3,
-      }, {
+        projectId: 'foo',
+        bucketName: 'min5---search---2018-01-23T01:10:00.000Z',
+      },
+      {
         timeBucket: 'hour',
         category: 'search',
         utcTime: '2018-01-23T01:00:00.000Z',
-        projectId: 'foo',
         value: 3,
-      }, {
+        projectId: 'foo',
+        bucketName: 'hour---search---2018-01-23T01:00:00.000Z',
+      },
+      {
         timeBucket: 'day',
         category: 'search',
         utcTime: '2018-01-23T00:00:00.000Z',
-        projectId: 'foo',
         value: 3,
-      }, {
+        projectId: 'foo',
+        bucketName: 'day---search---2018-01-23T00:00:00.000Z',
+      },
+      {
+        resetDay: 1,
         timeBucket: 'month',
         category: 'search',
         utcTime: '2018-01-01T00:00:00.000Z',
-        projectId: 'foo',
         value: 4,
+        projectId: 'foo',
+        bucketName: 'month||1---search---2018-01-01T00:00:00.000Z',
       },
     ];
 
@@ -416,61 +438,84 @@ describe('usageTracker integration tests', () => {
     dataPoints.sort();
 
     expect(dataPoints.length).to.eql(9);
-    let expectedDataPoints = [{
-      timeBucket: 'min5',
-      category: 'search',
-      utcTime: '2018-02-23T01:10:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'hour',
-      category: 'search',
-      utcTime: '2018-02-23T01:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'day',
-      category: 'search',
-      utcTime: '2018-02-23T00:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'month',
-      category: 'search',
-      utcTime: '2018-02-01T00:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'min5',
-      category: 'search',
-      utcTime: '2018-04-23T01:10:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'hour',
-      category: 'search',
-      utcTime: '2018-04-23T01:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'day',
-      category: 'search',
-      utcTime: '2018-04-23T00:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'month',
-      category: 'search',
-      utcTime: '2018-04-01T00:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'month',
-      category: 'search',
-      utcTime: '2018-01-01T00:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }];
+    let expectedDataPoints = [
+      {
+        timeBucket: 'min5',
+        category: 'search',
+        utcTime: '2018-02-23T01:10:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'min5---search---2018-02-23T01:10:00.000Z',
+      },
+      {
+        timeBucket: 'hour',
+        category: 'search',
+        utcTime: '2018-02-23T01:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'hour---search---2018-02-23T01:00:00.000Z',
+      },
+      {
+        timeBucket: 'day',
+        category: 'search',
+        utcTime: '2018-02-23T00:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'day---search---2018-02-23T00:00:00.000Z',
+      },
+      {
+        resetDay: 1,
+        timeBucket: 'month',
+        category: 'search',
+        utcTime: '2018-02-01T00:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'month||1---search---2018-02-01T00:00:00.000Z',
+      },
+      {
+        timeBucket: 'min5',
+        category: 'search',
+        utcTime: '2018-04-23T01:10:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'min5---search---2018-04-23T01:10:00.000Z',
+      },
+      {
+        timeBucket: 'hour',
+        category: 'search',
+        utcTime: '2018-04-23T01:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'hour---search---2018-04-23T01:00:00.000Z',
+      },
+      {
+        timeBucket: 'day',
+        category: 'search',
+        utcTime: '2018-04-23T00:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'day---search---2018-04-23T00:00:00.000Z',
+      },
+      {
+        resetDay: 1,
+        timeBucket: 'month',
+        category: 'search',
+        utcTime: '2018-04-01T00:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'month||1---search---2018-04-01T00:00:00.000Z',
+      },
+      {
+        resetDay: 1,
+        timeBucket: 'month',
+        category: 'search',
+        utcTime: '2018-01-01T00:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'month||1---search---2018-01-01T00:00:00.000Z',
+      },
+    ];
+
     dataPoints = dataPoints.map((dataPoint) => {
       dataPoint.utcTime = dataPoint.utcTime.toISO();
       return dataPoint;
@@ -485,31 +530,42 @@ describe('usageTracker integration tests', () => {
     dataPoints.sort();
     expect(dataPoints.length).to.eql(4);
 
-    expectedDataPoints = [{
-      timeBucket: 'min5',
-      category: 'search',
-      utcTime: '2018-04-23T01:10:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'hour',
-      category: 'search',
-      utcTime: '2018-04-23T01:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'day',
-      category: 'search',
-      utcTime: '2018-04-23T00:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }, {
-      timeBucket: 'month',
-      category: 'search',
-      utcTime: '2018-04-01T00:00:00.000Z',
-      value: 1,
-      projectId: 'foo',
-    }];
+    expectedDataPoints = [
+      {
+        timeBucket: 'min5',
+        category: 'search',
+        utcTime: '2018-04-23T01:10:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'min5---search---2018-04-23T01:10:00.000Z',
+      },
+      {
+        timeBucket: 'hour',
+        category: 'search',
+        utcTime: '2018-04-23T01:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'hour---search---2018-04-23T01:00:00.000Z',
+      },
+      {
+        timeBucket: 'day',
+        category: 'search',
+        utcTime: '2018-04-23T00:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'day---search---2018-04-23T00:00:00.000Z',
+      },
+      {
+        resetDay: 1,
+        timeBucket: 'month',
+        category: 'search',
+        utcTime: '2018-04-01T00:00:00.000Z',
+        value: 1,
+        projectId: 'foo',
+        bucketName: 'month||1---search---2018-04-01T00:00:00.000Z',
+      },
+    ];
+
     dataPoints = dataPoints.map((dataPoint) => {
       dataPoint.utcTime = dataPoint.utcTime.toISO();
       return dataPoint;
