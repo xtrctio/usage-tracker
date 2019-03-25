@@ -6,7 +6,7 @@ require('dotenv').config();
 const { expect } = require('chai');
 const { DateTime } = require('luxon');
 
-const Redis = require('ioredis');
+const Redis = require('@xtrctio/redis');
 
 const testConfig = require('../config');
 const { UsageTracker } = require('../../lib/services');
