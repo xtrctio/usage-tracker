@@ -14,9 +14,6 @@ const firebase = require('../firebase');
 const testConfig = require('../config');
 const { UsageTracker } = require('../../lib/services');
 
-const log = require('../../logger');
-
-const DELAY = 1;
 
 describe('usageTracker integration tests', function () {
   this.timeout(20000);
@@ -26,9 +23,7 @@ describe('usageTracker integration tests', function () {
   let originalMaxBatch = null;
 
   before(async () => {
-    log.error(`WARNING: THIS WILL DELETE ALL TOKEN CONTENT IN TESTING. ${DELAY} seconds to CTRL-C`);
-    await Promise.delay(DELAY * 1000);
-    await firebase.deletePath(UsageTracker.CONSTANTS.COLUMN_NAMES.USAGE);
+    await firebase.deleteCollection(UsageTracker.CONSTANTS.COLUMN_NAMES.USAGE);
 
     await redis.flushdb();
 
@@ -36,7 +31,7 @@ describe('usageTracker integration tests', function () {
   });
 
   beforeEach(async () => {
-    await firebase.deletePath(UsageTracker.CONSTANTS.COLUMN_NAMES.USAGE);
+    await firebase.deleteCollection(UsageTracker.CONSTANTS.COLUMN_NAMES.USAGE);
     await redis.flushdb();
   });
 

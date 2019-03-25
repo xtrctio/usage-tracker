@@ -3,6 +3,9 @@ jobs:
     docker:
       - image: node:10
       - image: redis:5
+      - image: xtrctio/firestore-emulator:latest
+        environment:
+          FIRESTORE_PROJECT_ID: xtrctio-testing
     working_directory: ~/repo
     steps:
       - checkout
@@ -28,6 +31,8 @@ jobs:
           environment:
             REDIS_HOST: localhost
             REDIS_PORT: 6379
+            FIRESTORE_EMULATOR_HOST: localhost:8080
+            FIRESTORE_PROJECT_ID: xtrctio-testing
 
       # run lint
       - run:

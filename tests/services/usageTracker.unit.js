@@ -69,12 +69,28 @@ describe('usageTracker unit tests', () => {
       .to.eql('min5---search---2018-01-01T01:10:00.000Z');
   });
 
+  it('gets hash field for category and time with reset day for month', () => {
+    const time = DateTime.utc(2018, 1, 1, 1, 14, 30);
+    expect(UsageTracker.getBucketName('search', UsageTracker.CONSTANTS.TIME_BUCKETS.MONTH, 1, time))
+      .to.eql('month||1---search---2018-01-01T00:00:00.000Z');
+  });
+
   it('parses bucketName (hash field)', () => {
     const utcTime = DateTime.utc(2018, 1, 1, 1, 10, 0);
     const parsed = UsageTracker.parseBucketName('min5---search---2018-01-01T01:10:00.000Z');
 
     expect(parsed.category).to.eql('search');
     expect(parsed.timeBucket).to.eql('min5');
+    expect(parsed.utcTime.toISO()).to.eql(utcTime.toISO());
+  });
+
+  it('parses bucketName with reset day in month', () => {
+    const utcTime = DateTime.utc(2018, 1, 1, 1, 10, 0);
+    const parsed = UsageTracker.parseBucketName('month||23---search---2018-01-01T01:10:00.000Z');
+
+    expect(parsed.category).to.eql('search');
+    expect(parsed.timeBucket).to.eql('month');
+    expect(parsed.resetDay).to.eql(23);
     expect(parsed.utcTime.toISO()).to.eql(utcTime.toISO());
   });
 
